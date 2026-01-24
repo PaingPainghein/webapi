@@ -1,1 +1,51 @@
-
+[
+  {
+    "id": "1",
+    "name": "Dtac Jaidee (Dtac)",
+    "price": "၃၀ ဘတ် / ၃၀ ရက်",
+    "link": "*117*30#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphtruedtac.png"
+  },
+  {
+    "id": "2",
+    "name": "Dtac Jaidee (True)",
+    "price": "၃၂ ဘတ် / ၃၀ ရက်",
+    "link": "*900*8131#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphtruedtac.png"
+  },
+  {
+    "id": "3",
+    "name": "Dtac Gaming",
+    "price": "၆၁ ဘတ် / ၉၀ ရက်",
+    "link": "https://app.dtac.co.th/login",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphdtac.png"
+  },
+  {
+    "id": "4",
+    "name": "True Twitter",
+    "price": "၅၄ ဘတ် / ၃၀ ရက်",
+    "link": "*900*3509#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphtrue.png"
+  },
+  {
+    "id": "5",
+    "name": "True VDO",
+    "price": "၈၅ ဘတ် / ၃၀ ရက်",
+    "link": "*900*8234#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphtrue.png"
+  },
+  {
+    "id": "6",
+    "name": "True Viber",
+    "price": "၅၃ ဘတ် / ၃၀ ရက်",
+    "link": "*900*3809#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphtrue.png"
+  },
+  {
+    "id": "7",
+    "name": "AIS 128kbps",
+    "price": "၃၆ ဘတ် / ၃၀ ရက်",
+    "link": "*777*7068#",
+    "image": "https://raw.githubusercontent.com/PaingPainghein/app-ads/refs/heads/main/img/pphais.png"
+  }
+]
