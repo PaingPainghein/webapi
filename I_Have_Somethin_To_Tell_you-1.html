@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>I Have Somethin To Tell you✉</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  font-family:system-ui,-apple-system,"Noto Sans Myanmar",sans-serif;
+  background:radial-gradient(circle at 50% 25%,#ffe9f1 0,#ffd4e3 35%,#f6b8cf 70%,#d98caf 100%);
+  color:#4b2032;
+}
+.page{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:22px;opacity:0;visibility:hidden;transform:scale(.97);
+  transition:opacity .65s ease,transform .65s ease,visibility .65s;
+}
+.page.active{opacity:1;visibility:visible;transform:scale(1)}
+.card{
+  width:min(92vw,500px);max-height:92vh;overflow:auto;text-align:center;
+  padding:30px 22px;border:1px solid rgba(255,255,255,.65);
+  border-radius:30px;background:rgba(255,255,255,.32);
+  box-shadow:0 20px 60px rgba(91,22,55,.18),inset 0 1px 0 rgba(255,255,255,.7);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+h1{font-size:clamp(25px,7vw,38px);margin:0 0 14px}
+p{font-size:18px;line-height:1.8;margin:12px 0}
+.small{font-size:15px;opacity:.78}
+.btn{
+  border:0;border-radius:999px;padding:14px 25px;margin:9px 5px;
+  font-size:16px;font-weight:700;color:white;cursor:pointer;
+  background:linear-gradient(135deg,#ff477e,#c92867);
+  box-shadow:0 10px 25px rgba(201,40,103,.28);
+  transition:transform .2s ease,filter .2s ease,opacity .2s ease;
+}
+.btn:active{transform:scale(.94)}
+.btn:hover{filter:brightness(1.06)}
+.btn.no{background:linear-gradient(135deg,#777,#454545)}
+.btn.locked{opacity:.38;cursor:not-allowed;filter:grayscale(1)}
+.hidden{display:none!important}
+.gift{
+  width:145px;height:110px;position:relative;margin:30px auto 20px;
+  animation:drop .9s cubic-bezier(.2,.8,.2,1) both,giftbounce 1.35s ease-in-out .95s infinite;
+  cursor:pointer;
+}
+.box{position:absolute;left:15px;right:15px;bottom:0;height:78px;border-radius:10px 10px 15px 15px;background:linear-gradient(135deg,#ff547f,#d91e61);box-shadow:0 18px 30px rgba(110,24,62,.25)}
+.lid{position:absolute;left:5px;right:5px;top:16px;height:31px;border-radius:9px;background:linear-gradient(135deg,#ff7095,#e22c68);z-index:2}
+.ribbonV{position:absolute;left:61px;top:0;width:24px;height:108px;background:#ffd45d;z-index:3}
+.ribbonH{position:absolute;left:0;right:0;top:19px;height:20px;background:#ffd45d;z-index:4;border-radius:7px}
+.bow{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;width:58px;height:28px}
+.bow:before,.bow:after{content:"";position:absolute;width:34px;height:20px;background:#ffd45d;border-radius:70% 20% 70% 20%}
+.bow:before{left:0;transform:rotate(28deg)}.bow:after{right:0;transform:scaleX(-1) rotate(28deg)}
+@keyframes drop{from{transform:translateY(-60vh) rotate(-8deg);opacity:0}to{transform:translateY(0) rotate(0);opacity:1}}
+@keyframes giftbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+.envelope-wrap{position:relative;width:220px;height:160px;margin:20px auto;cursor:pointer;animation:sideIn .8s ease both}
+@keyframes sideIn{from{transform:translateX(120vw) rotate(8deg);opacity:0}to{transform:none;opacity:1}}
+.env{position:absolute;inset:15px 0 0;background:#fff6fa;border-radius:12px;box-shadow:0 18px 35px rgba(72,15,42,.18);overflow:hidden}
+.env:before{content:"";position:absolute;left:0;right:0;top:0;margin:auto;width:0;height:0;border-left:110px solid transparent;border-right:110px solid transparent;border-top:80px solid #ffd3e2;transform-origin:top;transition:transform .7s ease;z-index:2}
+.env.open:before{transform:rotateX(180deg);z-index:0}
+.env:after{content:"";position:absolute;left:0;right:0;bottom:0;margin:auto;width:0;height:0;border-left:110px solid transparent;border-right:110px solid transparent;border-bottom:80px solid #ffe4ed}
+.heartseal{position:absolute;z-index:4;left:50%;top:72px;transform:translateX(-50%);font-size:32px;transition:.5s}
+.env.open .heartseal{opacity:0;transform:translate(-50%,20px) scale(.5)}
+.letter{
+  opacity:0;transform:translateY(30px) scale(.9);max-height:0;overflow:hidden;
+  transition:.7s ease;margin:10px auto;font-size:22px;font-weight:700;
+}
+.letter.show{opacity:1;transform:none;max-height:150px}
+.gif{width:min(220px,70vw);max-height:220px;object-fit:contain;border-radius:18px;margin:12px auto;display:block}
+.love-text{font-size:20px!important;font-weight:600;line-height:2}
+.choice{display:flex;justify-content:center;flex-wrap:wrap}
+.count{font-size:58px;font-weight:900;animation:pulse .8s infinite}
+@keyframes pulse{50%{transform:scale(1.12);opacity:.6}}
+.lyrics{
+  margin-top:15px;text-align:left;max-height:45vh;overflow:auto;padding:8px;
+  scroll-behavior:smooth;
+}
+.line{padding:10px 12px;margin:6px 0;border-radius:14px;background:rgba(255,255,255,.28);opacity:.48;transition:.4s}
+.line.active{opacity:1;background:rgba(255,255,255,.72);transform:scale(1.02);box-shadow:0 7px 20px rgba(120,30,70,.12)}
+.en{font-size:15px;font-weight:700}.mm{font-size:14px;margin-top:4px;opacity:.8}
+.final{font-size:32px;font-weight:900;animation:heartbeat 1.2s infinite}
+@keyframes heartbeat{50%{transform:scale(1.06)}}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.heart{position:absolute;bottom:-40px;font-size:22px;animation:floatUp linear forwards;opacity:.8}
+@keyframes floatUp{to{transform:translateY(-110vh) translateX(var(--x)) rotate(360deg);opacity:0}}
+.toast{font-size:17px;font-weight:700;margin:12px 0}
+@media(max-width:380px){.card{padding:24px 16px}.love-text{font-size:18px!important}.gif{max-height:180px}}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<section class="page active" id="p1">
+  <div class="card">
+    <h1>I Have Somethin To Tell you✉</h1>
+    <div class="gift" onclick="openGift()">
+      <div class="bow"></div><div class="lid"></div><div class="ribbonH"></div><div class="box"></div><div class="ribbonV"></div>
+    </div>
+    <p id="giftMsg">ကျွန်တော့်ကိုမြန်မြန်လေးဖွင့်ပေးပါတော့😫</p>
+    <p class="small" id="hint">Gift box လေးကို ဖွင့်ပေးပါနော် 💝</p>
+    <button class="btn hidden" id="giftBtn" onclick="openGift()">🎁 Gift Box ကိုဖွင့်မယ်</button>
+  </div>
+</section>
+
+<section class="page" id="p2">
+  <div class="card">
+    <h1>📨 Something is waiting...</h1>
+    <div class="envelope-wrap" onclick="openEnvelope()">
+      <div class="env" id="env"><div class="heartseal">❤️</div></div>
+    </div>
+    <div class="letter" id="letter">ဟိုလေ....မေးစရာလေးရှိလို😶</div>
+    <img class="gif hidden" id="gif1" src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyMzQ4NjNuZmp5aG8xbXB1ODA1czQ3NHB1MXU5NmRhNm52OTYzbXd6dyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/yD6ANiPNf7XnU1Mi2N/200w.webp" alt="cute">
+    <button class="btn hidden" id="next2" onclick="go(3)">Next 💌</button>
+  </div>
+</section>
+
+<section class="page" id="p3">
+  <div class="card">
+    <h1>❤️</h1>
+    <p class="love-text">ခင်ဗျားကို ကျွန်တော် ချစ်နေမိပြီဗျာ… 📻❤️<br>
+    အဲ့ဒီအချစ်က ခေတ်ဟောင်းသီချင်းတစ်ပုဒ်လို<br>
+    တစ်ခါနားထောင်ပြီးရင် ရင်ထဲက မထွက်တော့ဘူး။<br>
+    ခင်ဗျားရော… ကျွန်တော့်ကို ပြန်ချစ်ပေးမလားဗျာ? 🌹</p>
+    <img class="gif" src="https://media.giphy.com/media/mpu7L6b0oRy0KOuyd7/giphy.gif" alt="begging">
+    <div class="choice">
+      <button class="btn" onclick="yes()">ချစ်တယ် ❤️</button>
+      <button class="btn no" id="noBtn" onclick="nope()">မချစ်ဘူး၊ ငြင်းတယ် 😤</button>
+    </div>
+    <div class="toast hidden" id="noText"></div>
+    <img class="gif hidden" id="noGif" src="https://media.giphy.com/media/zBjObo9umi0wbrCRdP/giphy.gif" alt="minions">
+  </div>
+</section>
+
+<section class="page" id="p4">
+  <div class="card">
+    <h1>🥹❤️</h1>
+    <p class="love-text">ဟီး..ဒီကလဲပြန်ချစ်ပါတယ်😁</p>
+    <img class="gif" src="https://i.giphy.com/IcJ6n6VJNjRNS.webp" alt="happy">
+    <button class="btn" onclick="go(5)">Next 💖</button>
+  </div>
+</section>
+
+<section class="page" id="p5">
+  <div class="card">
+    <h1>💞</h1>
+    <p class="love-text">ဒါဆိုကိုယ်တို့လဲ ချစ်သူတွေဖြစ်ကျပြီပေါ့နော 😖</p>
+    <img class="gif" src="https://media.giphy.com/media/7CQt29VZFXY0QR3PJV/giphy.gif" alt="cute">
+    <button class="btn" onclick="go(6)">Next 🌹</button>
+  </div>
+</section>
+
+<section class="page" id="p6">
+  <div class="card">
+    <h1>🤭 Surprise!</h1>
+    <p class="love-text">ဒါနဲ့ surprise သေးသေးလေးရှိတယ်<br>ကြည့်ကြည့်ချင်လား🤭🤭</p>
+    <button class="btn" onclick="countdown()">ကြည့်မယ် 👀❤️</button>
+  </div>
+</section>
+
+<section class="page" id="countPage">
+  <div class="card"><div class="count" id="count">3</div><p>ခဏလေးနော်...🥰</p></div>
+</section>
+
+<section class="page" id="p7">
+  <div class="card">
+    <h1>ဒီသီချင်းလေးက ခင်ဗျားကိုအမှတ်ရစေတယ်🥰</h1>
+    <button class="btn" id="musicBtn" onclick="toggleMusic()">▶ Play Music</button>
+    <audio id="audio" preload="auto" src="https://www.image2url.com/r2/default/audio/1787370425843-3f379f97-37ed-46b1-b079-816682a3b598.mp3"></audio>
+    <div class="lyrics" id="lyrics">
+      <div class="line" data-start="0" data-end="3"><div class="en">Who would have even known</div><div class="mm">"ဘယ်သူတွေက သိနိုင်မှာမို့လို့လဲ"</div></div>
+      <div class="line" data-start="3" data-end="5"><div class="en">That we would ever be more than friends</div><div class="mm">"ကိုယ်တို့က သူငယ်ချင်းအဆင့်ထက် ပိုနေပြီ ဆိုတာကိုလဲ"</div></div>
+      <div class="line" data-start="5" data-end="7"><div class="en">We're real world wide, breakin' all the rules</div><div class="mm">"လောကကြီးရဲ့ စည်းဘောင်တွေကို အတူတူ ချိုးဖောက်ကြမယ်"</div></div>
+      <div class="line" data-start="8" data-end="10"><div class="en">She's like a song played again and again</div><div class="mm">"သူမက ထပ်ထပ်ခါ နားထောင်နေရတဲ့ သီချင်းလေးလိုပဲ"</div></div>
+      <div class="line" data-start="11" data-end="13"><div class="en">That girl, like somethin' off a poster</div><div class="mm">"သူမလေးက ပိုစတာပေါ်က မင်းသမီးလေး လိုပဲ"</div></div>
+      <div class="line" data-start="13" data-end="16"><div class="en">That girl is a dime, they say</div><div class="mm">"သူမလေးက ထိပ်တန်းဆယ်ယောက်ထဲ ပါတာလားလို့ မေးနေကြပြီ"</div></div>
+      <div class="line" data-start="16" data-end="18"><div class="en">That girl is a gun to my holster</div><div class="mm">"သူမလေးက ငါ့အသိုက်ကို တစ်ချိန်လုံး"</div></div>
+      <div class="line" data-start="18" data-end="21"><div class="en">She's running through my mind all day</div><div class="mm">"ငါ့စိတ်ကို တစ်ချိန်လုံး စီးမိုး နေတာလည်း သူပါပဲ"</div></div>
+      <div class="line" data-start="22" data-end="25"><div class="en">Shawty's like a melody in my head</div><div class="mm">"မင်းလေးက ကိုယ့်အတွက်တော့ သံစဉ်လေးလိုပဲ"</div></div>
+      <div class="line" data-start="25" data-end="27"><div class="en">That I can't keep out, got me singin' like</div><div class="mm">"ကိုယ်ဆိုနေကျ သီချင်းလေးထဲကလိုပေါ့"</div></div>
+      <div class="line" data-start="27" data-end="28"><div class="en">Na na na na everyday</div><div class="mm">"နေ့တိုင်းလိုလို"</div></div>
+      <div class="line" data-start="29" data-end="32"><div class="en">It's like my iPod's stuck on replay, replay</div><div class="mm">"ကိုယ့်နားထဲမှာ အမြဲ နားထောင်နေတဲ့ သီချင်းလေးလိုပဲ"</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p8">
+  <div class="card"><div class="final">အရမ်းချစ်ပါတယ်😉❤️</div></div>
+</section>
+
+<script>
+let noAttempts=0, musicStarted=false;
+const $=id=>document.getElementById(id);
+function go(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=n==='count'?$('countPage'):$('p'+n);
+  if(el) el.classList.add('active');
+}
+function openGift(){
+  go(2);
+}
+setTimeout(()=>{$('giftBtn').classList.remove('hidden')},3000);
+
+function openEnvelope(){
+  $('env').classList.add('open');
+  setTimeout(()=>{
+    $('letter').classList.add('show');
+    $('gif1').classList.remove('hidden');
+    $('next2').classList.remove('hidden');
+    burst();
+  },500);
+}
+function nope(){
+  noAttempts++;
+  $('noText').classList.remove('hidden');
+  $('noGif').classList.remove('hidden');
+  $('noText').textContent=noAttempts===1
+    ?'ဟမ်.....သေချာပြန်ရွေး..အဖြေမကြိုက်ဘူး😠'
+    :'ဟမ်...ဒီတစ်ခါတော့ ငြင်းတယ်ဆိုတဲ့အဖြေကို Lock ချထားပြီနော် 😤❤️';
+  if(noAttempts>=2){
+    $('noBtn').disabled=true;
+    $('noBtn').classList.add('locked');
+    $('noBtn').textContent='🔒 Locked';
+  }
+}
+function yes(){go(4);burst()}
+function countdown(){
+  go('count');
+  let n=3;$('count').textContent=n;
+  const timer=setInterval(()=>{
+    n--;
+    if(n<=0){clearInterval(timer);go(7);setTimeout(startMusic,400)}
+    else $('count').textContent=n;
+  },1000);
+}
+function startMusic(){
+  const a=$('audio');
+  a.play().then(()=>{$('musicBtn').textContent='⏸ Pause Music';musicStarted=true}).catch(()=>{
+    $('musicBtn').textContent='▶ Tap to Play Music';
+  });
+}
+function toggleMusic(){
+  const a=$('audio');
+  if(a.paused){a.play();$('musicBtn').textContent='⏸ Pause Music'}
+  else{a.pause();$('musicBtn').textContent='▶ Play Music'}
+}
+const lines=[...document.querySelectorAll('.line')];
+$('audio').addEventListener('timeupdate',()=>{
+  const t=$('audio').currentTime;
+  let active=-1;
+  lines.forEach((l,i)=>{
+    const s=+l.dataset.start,e=+l.dataset.end;
+    const on=t>=s&&t<e;
+    l.classList.toggle('active',on);
+    if(on)active=i;
+  });
+  if(active>=0) lines[active].scrollIntoView({behavior:'smooth',block:'center'});
+});
+$('audio').addEventListener('ended',()=>{setTimeout(()=>go(8),800)});
+
+function burst(){
+  for(let i=0;i<12;i++){
+    const h=document.createElement('span');h.textContent=['❤️','💖','💕','✨'][Math.floor(Math.random()*4)];
+    h.className='heart';h.style.left=Math.random()*100+'%';h.style.setProperty('--x',(Math.random()*160-80)+'px');
+    h.style.animationDuration=(3+Math.random()*3)+'s';$('hearts').appendChild(h);
+    setTimeout(()=>h.remove(),6500);
+  }
+}
+setInterval(()=>{
+  const h=document.createElement('span');h.textContent=['♡','♥','✨'][Math.floor(Math.random()*3)];
+  h.className='heart';h.style.left=Math.random()*100+'%';h.style.setProperty('--x',(Math.random()*120-60)+'px');
+  h.style.animationDuration=(5+Math.random()*4)+'s';$('hearts').appendChild(h);
+  setTimeout(()=>h.remove(),9500);
+},900);
+</script>
+</body>
+</html>
