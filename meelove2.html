@@ -33,11 +33,12 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
   font-size:16px;font-weight:700;color:white;cursor:pointer;
   background:linear-gradient(135deg,#ff477e,#c92867);
   box-shadow:0 10px 25px rgba(201,40,103,.28);
-  transition:transform .2s ease,filter .2s ease,opacity .2s ease;
+  transition:transform .3s cubic-bezier(.175, .885, .32, 1.275), filter .2s ease, opacity .2s ease;
 }
 .btn:active{transform:scale(.94)}
 .btn:hover{filter:brightness(1.06)}
 .btn.no{background:linear-gradient(135deg,#777,#454545)}
+.btn.think{background:linear-gradient(135deg,#ffa500,#e67e22)}
 .btn.locked{opacity:.38;cursor:not-allowed;filter:grayscale(1)}
 .hidden{display:none!important}
 .gift{
@@ -69,7 +70,7 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 .letter.show{opacity:1;transform:none;max-height:150px}
 .gif{width:min(220px,70vw);max-height:220px;object-fit:contain;border-radius:18px;margin:12px auto;display:block}
 .love-text{font-size:20px!important;font-weight:600;line-height:2}
-.choice{display:flex;justify-content:center;flex-wrap:wrap}
+.choice{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin-top:15px;}
 .count{font-size:58px;font-weight:900;animation:pulse .8s infinite}
 @keyframes pulse{50%{transform:scale(1.12);opacity:.6}}
 .lyrics{
@@ -97,9 +98,9 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
     <div class="gift" onclick="openGift()">
       <div class="bow"></div><div class="lid"></div><div class="ribbonH"></div><div class="box"></div><div class="ribbonV"></div>
     </div>
-    <p id="giftMsg">ကျွန်တော့်ကိုမြန်မြန်လေးဖွင့်ပေးပါတော့😫</p>
-    <p class="small" id="hint">Gift box လေးကို ဖွင့်ပေးပါနော် 💝</p>
-    <button class="btn hidden" id="giftBtn" onclick="openGift()">🎁 Gift Box ကိုဖွင့်မယ်</button>
+    <p id="giftMsg">ကိုယ့်ကိုမြန်မြန်လေးဖွင့်ပေးပါတော့😫</p>
+    <p class="small" id="hint">Gift box လေးကို ဖွင့်ပေးပါနော် 💝</p>
+    <button class="btn hidden" id="giftBtn" onclick="openGift()">🎁 Gift Box ကိုဖွင့်မယ်</button>
   </div>
 </section>
 
@@ -109,7 +110,7 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
     <div class="envelope-wrap" onclick="openEnvelope()">
       <div class="env" id="env"><div class="heartseal">❤️</div></div>
     </div>
-    <div class="letter" id="letter">ဟိုလေ....မေးစရာလေးရှိလို😶</div>
+    <div class="letter" id="letter">ဟိုလေ....မေးစရာလေးရှိလို့😶</div>
     <img class="gif hidden" id="gif1" src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyMzQ4NjNuZmp5aG8xbXB1ODA1czQ3NHB1MXU5NmRhNm52OTYzbXd6dyZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/yD6ANiPNf7XnU1Mi2N/200w.webp" alt="cute">
     <button class="btn hidden" id="next2" onclick="go(3)">Next 💌</button>
   </div>
@@ -118,13 +119,14 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 <section class="page" id="p3">
   <div class="card">
     <h1>❤️</h1>
-    <p class="love-text">ခင်ဗျားကို ကျွန်တော် ချစ်နေမိပြီဗျာ… 📻❤️<br>
+    <p class="love-text">မီးကို ကိုယ် ချစ်နေမိပြီဗျာ… 📻❤️<br>
     အဲ့ဒီအချစ်က ခေတ်ဟောင်းသီချင်းတစ်ပုဒ်လို<br>
     တစ်ခါနားထောင်ပြီးရင် ရင်ထဲက မထွက်တော့ဘူး။<br>
-    ခင်ဗျားရော… ကျွန်တော့်ကို ပြန်ချစ်ပေးမလားဗျာ? 🌹</p>
+    မီးရော… ကိုယ့်ကို ပြန်ချစ်ပေးမလားဗျာ? 🌹</p>
     <img class="gif" src="https://media.giphy.com/media/mpu7L6b0oRy0KOuyd7/giphy.gif" alt="begging">
     <div class="choice">
-      <button class="btn" onclick="yes()">ချစ်တယ် ❤️</button>
+      <button class="btn" id="yesBtn" onclick="yes()">ချစ်တယ် ❤️</button>
+      <button class="btn think" id="thinkBtn" onclick="think()">စဉ်းစားအုံးမယ် 🤔</button>
       <button class="btn no" id="noBtn" onclick="nope()">မချစ်ဘူး၊ ငြင်းတယ် 😤</button>
     </div>
     <div class="toast hidden" id="noText"></div>
@@ -144,7 +146,7 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 <section class="page" id="p5">
   <div class="card">
     <h1>💞</h1>
-    <p class="love-text">ဒါဆိုကိုယ်တို့လဲ ချစ်သူတွေဖြစ်ကျပြီပေါ့နော 😖</p>
+    <p class="love-text">ဒါဆိုကိုယ်တို့လဲ ချစ်သူတွေဖြစ်ကြပြီပေါ့နော 😖</p>
     <img class="gif" src="https://media.giphy.com/media/7CQt29VZFXY0QR3PJV/giphy.gif" alt="cute">
     <button class="btn" onclick="go(6)">Next 🌹</button>
   </div>
@@ -153,8 +155,8 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 <section class="page" id="p6">
   <div class="card">
     <h1>🤭 Surprise!</h1>
-    <p class="love-text">ဒါနဲ့ surprise သေးသေးလေးရှိတယ်<br>ကြည့်ကြည့်ချင်လား🤭🤭</p>
-    <button class="btn" onclick="countdown()">ကြည့်မယ် 👀❤️</button>
+    <p class="love-text">ဒါနဲ့ surprise သေးသေးလေးရှိတယ်<br>ကြည့်ကြည့်ချင်လား🤭🤭</p>
+    <button class="btn" onclick="countdown()">ကြည့်မယ် 👀❤️</button>
   </div>
 </section>
 
@@ -164,7 +166,7 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 
 <section class="page" id="p7">
   <div class="card">
-    <h1>ဒီသီချင်းလေးက ခင်ဗျားကိုအမှတ်ရစေတယ်🥰</h1>
+    <h1>ဒီသီချင်းလေးက မီးကိုအမှတ်ရစေတယ်🥰</h1>
     <button class="btn" id="musicBtn" onclick="toggleMusic()">▶ Play Music</button>
     <audio id="audio" preload="auto" src="https://www.image2url.com/r2/default/audio/1787370425843-3f379f97-37ed-46b1-b079-816682a3b598.mp3"></audio>
     <div class="lyrics" id="lyrics">
@@ -189,7 +191,7 @@ p{font-size:18px;line-height:1.8;margin:12px 0}
 </section>
 
 <script>
-let noAttempts=0, musicStarted=false;
+let noAttempts=0, thinkAttempts=0, yesScale=1, musicStarted=false;
 const $=id=>document.getElementById(id);
 function go(n){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -209,6 +211,19 @@ function openEnvelope(){
     $('next2').classList.remove('hidden');
     burst();
   },500);
+}
+function think(){
+  thinkAttempts++;
+  yesScale += 0.35; // နှိပ်လိုက်တိုင်း "ချစ်တယ်" ခလုတ်ကို ၃၅% စီ ကြီးလာစေပါတယ်
+  $('yesBtn').style.transform = `scale(${yesScale})`;
+  
+  $('noText').classList.remove('hidden');
+  const msgs = [
+    'အကြာကြီး မစဉ်းစားပါနဲ့နော်... ကြည့်ဦး "ချစ်တယ်" ခလုတ်လေး ကြီးလာပြီ 🥺',
+    'စဉ်းစားမနေနဲ့တော့နော် ခလုတ်ကြီးကို နှိပ်လိုက်တော့ 😁❤️',
+    'ဟောကြည့်... စဉ်းစားလေ "ချစ်တယ်" ခလုတ်က ကြီးလာလေပဲ! 💖'
+  ];
+  $('noText').textContent = msgs[Math.min(thinkAttempts - 1, msgs.length - 1)];
 }
 function nope(){
   noAttempts++;
