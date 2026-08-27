@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For You 💗</title>
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-soft:#ffb3d1; --purple:#8a5cff; --blue:#5ec9ff;
+    --bg1:#1a0f2e; --bg2:#2b1245;
+    --card:rgba(255,255,255,0.07); --card-border:rgba(255,255,255,0.16);
+    --text:#fbeaf5; --text-dim:#d9b8d6;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+  html,body{margin:0;padding:0;width:100%;height:100%;overflow-x:hidden;}
+  body{
+    min-height:100vh; min-height:100dvh;
+    font-family:'Segoe UI','Noto Sans Myanmar','Padauk',sans-serif;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(138,92,255,0.35), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(255,111,165,0.28), transparent 45%),
+      radial-gradient(circle at 50% 95%, rgba(94,201,255,0.20), transparent 50%),
+      linear-gradient(160deg, var(--bg1), var(--bg2) 60%, #150a26);
+    color:var(--text); position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #stage{ position:relative; width:100%; min-height:100vh; min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:28px 18px; }
+  .glow-circle{ position:fixed; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0; }
+  .g1{width:280px;height:280px; background:rgba(255,111,165,0.32); top:-70px; left:-70px;}
+  .g2{width:320px;height:320px; background:rgba(138,92,255,0.28); bottom:-90px; right:-70px;}
+  .g3{width:240px;height:240px; background:rgba(94,201,255,0.18); top:45%; left:50%; transform:translate(-50%,-50%);}
+  .ray{ position:fixed; top:-10%; width:2px; height:60%; background:linear-gradient(to bottom, rgba(255,255,255,0.18), transparent); pointer-events:none; z-index:0; }
+
+  .particle{ position:fixed; pointer-events:none; z-index:1; will-change:transform,opacity; animation:floatUp linear infinite; }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.9; } 88%{ opacity:0.6; }
+    100%{ transform:translateY(-115vh) translateX(var(--drift,20px)) rotate(340deg); opacity:0; }
+  }
+  @keyframes sparklePop{ 0%{transform:scale(0); opacity:0;} 50%{transform:scale(1.2); opacity:1;} 100%{transform:scale(0.8); opacity:0;} }
+  .sparkle{ position:fixed; z-index:1; pointer-events:none; animation:sparklePop 1.4s ease-out forwards; }
+
+  .content{ position:relative; z-index:3; width:100%; max-width:520px; text-align:center; }
+  .fade-block{ opacity:0; transform:translateY(18px) scale(0.96); filter:blur(6px); animation:blockIn .85s cubic-bezier(.2,.8,.2,1) forwards; }
+  .fade-block.out{ animation:blockOut .55s ease forwards; }
+  @keyframes blockIn{ to{ opacity:1; transform:translateY(0) scale(1); filter:blur(0);} }
+  @keyframes blockOut{ to{ opacity:0; transform:translateY(-14px) scale(0.96); filter:blur(6px);} }
+
+  .eyebrow{ font-size:0.95rem; color:var(--text-dim); margin-bottom:10px; letter-spacing:0.3px; }
+  .big-line{ font-size:1.5rem; line-height:1.7; font-weight:600; margin:0 0 8px;
+    background:linear-gradient(90deg, var(--pink-soft), var(--purple));
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub-line{ font-size:1.05rem; color:var(--text-dim); line-height:1.7; margin:0; }
+
+  .letter-card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:26px;
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    padding:34px 26px; box-shadow:0 10px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    position:relative; margin-bottom:26px;
+  }
+  .letter-card::before, .letter-card::after{ content:'💗'; position:absolute; font-size:1.3rem; opacity:0.55; }
+  .letter-card::before{ top:14px; left:16px; }
+  .letter-card::after{ bottom:14px; right:16px; }
+  .letter-text{ font-size:1.18rem; line-height:1.9; white-space:pre-wrap; word-break:break-word; }
+
+  .btn{ display:inline-block; padding:15px 34px; border:none; border-radius:50px; font-size:1.02rem; font-weight:600;
+    color:#fff; cursor:pointer; background:linear-gradient(135deg, var(--pink), var(--purple));
+    box-shadow:0 8px 26px rgba(255,111,165,0.4); transition:transform .18s, box-shadow .3s; animation:pulseBtn 2.4s ease-in-out infinite; }
+  .btn:active{ transform:scale(0.94); }
+  @keyframes pulseBtn{ 0%,100%{ box-shadow:0 8px 26px rgba(255,111,165,0.4);} 50%{ box-shadow:0 8px 34px rgba(255,111,165,0.7);} }
+
+  #introScreen, #drawScreen, #envelopeScreen, #storyScreen, #questionScreen, #finalScreen{ width:100%; }
+  .hidden{ display:none !important; }
+
+  .gift-icon{ font-size:4rem; margin-bottom:18px; animation:floatGift 3s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(255,111,165,0.5)); }
+  @keyframes floatGift{ 0%,100%{ transform:translateY(0) rotate(-3deg);} 50%{ transform:translateY(-14px) rotate(3deg);} }
+
+  canvas#heartCanvas{ width:100%; max-width:340px; aspect-ratio:1/1; touch-action:none; border-radius:26px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.14); box-shadow:inset 0 0 40px rgba(255,111,165,0.08); }
+  .draw-wrap{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .clear-link{ color:var(--text-dim); font-size:0.85rem; text-decoration:underline; cursor:pointer; background:none; border:none; }
+
+  .envelope{ position:relative; width:190px; height:130px; margin:0 auto 26px; cursor:pointer;
+    animation:envFloat 3.4s ease-in-out infinite; }
+  @keyframes envFloat{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-10px);} }
+  .env-body{ position:absolute; inset:0; background:linear-gradient(160deg,#fff0f6,#ffd6e8); border-radius:12px;
+    box-shadow:0 14px 34px rgba(255,111,165,0.35), 0 0 0 1px rgba(255,255,255,0.5) inset; }
+  .env-flap{ position:absolute; top:0; left:0; width:100%; height:70px; background:linear-gradient(160deg,#ffe0ec,#ffc2dd);
+    clip-path:polygon(0 0,50% 62%,100% 0); border-radius:12px 12px 0 0; transform-origin:top; transition:transform .7s cubic-bezier(.2,.8,.2,1); z-index:2; }
+  .env-heart{ position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); font-size:1.6rem; z-index:1;
+    animation:heartbeat 1.6s ease-in-out infinite; }
+  @keyframes heartbeat{ 0%,100%{ transform:translate(-50%,-50%) scale(1);} 50%{ transform:translate(-50%,-50%) scale(1.18);} }
+  .envelope.open .env-flap{ transform:rotateX(150deg); }
+  .letter-slip{ position:absolute; left:8%; bottom:14%; width:84%; height:40%; background:#fff; border-radius:8px; z-index:0;
+    opacity:0; transition:transform .8s ease, opacity .8s ease; }
+  .envelope.open .letter-slip{ opacity:1; transform:translateY(-160%) scale(1.06); }
+
+  .next-btn-wrap{ margin-top:8px; }
+  .story-progress{ display:flex; gap:6px; justify-content:center; margin-bottom:18px; }
+  .story-progress span{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.2); transition:background .3s, width .3s; }
+  .story-progress span.on{ background:var(--pink); width:16px; border-radius:4px; }
+
+  #introScreen .sub-line{ margin-top:6px; }
+  .final-heart{ font-size:3.4rem; animation:heartbeat 1.8s ease-in-out infinite; margin-bottom:10px; filter:drop-shadow(0 0 24px rgba(255,111,165,0.6)); }
+  .final-title{ font-size:2rem; font-weight:700; margin:14px 0 6px;
+    background:linear-gradient(90deg, var(--pink), var(--purple), var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  @media (max-width:400px){
+    .big-line{ font-size:1.25rem; } .letter-text{ font-size:1.05rem; } .final-title{ font-size:1.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<audio id="bgm" src="https://www.image2url.com/r2/default/audio/1786530474544-9b7a0d7e-7740-40d0-8419-4a59680421e9.mp3" loop preload="auto" style="display:none;"></audio>
+
+<div class="glow-circle g1"></div>
+<div class="glow-circle g2"></div>
+<div class="glow-circle g3"></div>
+
+<div id="stage">
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+var CONFIG = {"call1":"မီး","call2":"ကို","call3":"ဗျ","messages":[]};
+
+/* ================= AUDIO ================= */
+var bgm = document.getElementById('bgm');
+function tryPlayAudio(){
+  var p = bgm.play();
+  if (p && p.catch) { p.catch(function(){ /* wait for interaction */ }); }
+}
+tryPlayAudio();
+['click','touchstart','keydown'].forEach(function(evt){
+  document.addEventListener(evt, function once(){ tryPlayAudio(); }, { once:true });
+});
+
+/* ================= AMBIENT PARTICLES ================= */
+var HEART_SYMBOLS = ['❤️','💗','💕','💓','💞','💖','💘'];
+var SPARKLE_SYMBOLS = ['✨','⭐','🌟'];
+function spawnFloating(sym, sizeMin, sizeMax, durMin, durMax){
+  var el = document.createElement('div');
+  el.className = 'particle';
+  el.textContent = sym;
+  var size = sizeMin + Math.random() * (sizeMax - sizeMin);
+  el.style.left = (Math.random()*100) + 'vw';
+  el.style.bottom = '-40px';
+  el.style.fontSize = size + 'px';
+  el.style.setProperty('--drift', (Math.random()*90-45) + 'px');
+  var dur = durMin + Math.random() * (durMax - durMin);
+  el.style.animationDuration = dur + 's';
+  document.body.appendChild(el);
+  setTimeout(function(){ el.remove(); }, dur*1000 + 300);
+}
+var ambientTimer = setInterval(function(){
+  spawnFloating(HEART_SYMBOLS[Math.floor(Math.random()*HEART_SYMBOLS.length)], 14, 26, 9, 15);
+}, 1100);
+
+function burstSparkles(count, cx, cy){
+  for (var i=0;i<count;i++){
+    (function(){
+      var el = document.createElement('div');
+      el.className = 'sparkle';
+      el.textContent = SPARKLE_SYMBOLS[Math.floor(Math.random()*SPARKLE_SYMBOLS.length)];
+      var angle = Math.random()*Math.PI*2;
+      var dist = 40 + Math.random()*120;
+      var x = (cx == null ? window.innerWidth/2 : cx) + Math.cos(angle)*dist;
+      var y = (cy == null ? window.innerHeight/2 : cy) + Math.sin(angle)*dist;
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.fontSize = (10 + Math.random()*14) + 'px';
+      document.body.appendChild(el);
+      setTimeout(function(){ el.remove(); }, 1500);
+    })();
+  }
+}
+
+/* ================= SCREEN RENDERING ================= */
+var contentEl = document.getElementById('content');
+
+function setScreen(html, cb){
+  var old = contentEl.firstElementChild;
+  function place(){
+    contentEl.innerHTML = html;
+    var block = contentEl.firstElementChild;
+    if (block) block.classList.add('fade-block');
+    if (cb) cb();
+  }
+  if (old){
+    old.classList.add('out');
+    setTimeout(place, 480);
+  } else {
+    place();
+  }
+}
+
+/* ================= STEP 1: INTRO ================= */
+function renderIntro(){
+  setScreen(
+    '<div id="introScreen">' +
+      '<div class="gift-icon">🎁</div>' +
+      '<p class="big-line">သင့်အတွက် Gift လေးရှိပါတယ် 🎁❤️</p>' +
+      '<p class="sub-line">အသဲပုံလေးဆွဲပြီး Gift ကိုကြည့်ပါနော် 🥺💗</p>' +
+      '<div class="next-btn-wrap" style="margin-top:26px;">' +
+        '<button class="btn" id="introNext">စတင်မယ် 💗</button>' +
+      '</div>' +
+    '</div>',
+    function(){
+      document.getElementById('introNext').addEventListener('click', renderDraw);
+    }
+  );
+}
+
+/* ================= STEP 2: HEART DRAWING ================= */
+function renderDraw(){
+  setScreen(
+    '<div id="drawScreen">' +
+      '<p class="big-line" style="font-size:1.2rem;">ဒီမှာ အသဲပုံလေးဆွဲပေးပါ ❤️</p>' +
+      '<div class="draw-wrap">' +
+        '<canvas id="heartCanvas"></canvas>' +
+        '<button class="clear-link" id="clearCanvas">ပြန်ဆွဲမယ် ↺</button>' +
+      '</div>' +
+    '</div>',
+    initHeartCanvas
+  );
+}
+
+function initHeartCanvas(){
+  var canvas = document.getElementById('heartCanvas');
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+
+  function resize(){
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawGuide();
+  }
+
+  function drawGuide(){
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0,0,w,h);
+    ctx.save();
+    ctx.globalAlpha = 0.10;
+    ctx.strokeStyle = '#ff6fa5';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    var cx = w/2, topY = h*0.32, scale = Math.min(w,h)/28;
+    for (var t=0; t<=Math.PI*2+0.01; t+=0.02){
+      var x = 16*Math.pow(Math.sin(t),3);
+      var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+      var px = cx + x*scale;
+      var py = topY + (-y)*scale;
+      if (t===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+    redrawStroke();
+  }
+
+  var points = [];
+  var strokes = [];
+  var drawing = false;
+  var completed = false;
+
+  function redrawStroke(){
+    ctx.save();
+    ctx.strokeStyle = '#ff6fa5';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = 'rgba(255,111,165,0.6)';
+    ctx.shadowBlur = 8;
+    strokes.forEach(function(s){
+      ctx.beginPath();
+      s.forEach(function(p,i){ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  function getPos(e){
+    var rect = canvas.getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  var currentStroke = [];
+  function start(e){
+    if (completed) return;
+    e.preventDefault();
+    drawing = true;
+    currentStroke = [];
+    var p = getPos(e);
+    currentStroke.push(p);
+    points.push(p);
+  }
+  function move(e){
+    if (!drawing || completed) return;
+    e.preventDefault();
+    var p = getPos(e);
+    currentStroke.push(p);
+    points.push(p);
+    drawGuide();
+    strokes.push(currentStroke);
+    redrawStroke();
+    strokes.pop();
+    ctx.save();
+    ctx.strokeStyle = '#ff6fa5'; ctx.lineWidth = 5; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.shadowColor = 'rgba(255,111,165,0.6)'; ctx.shadowBlur = 8;
+    ctx.beginPath();
+    currentStroke.forEach(function(pt,i){ if(i===0) ctx.moveTo(pt.x,pt.y); else ctx.lineTo(pt.x,pt.y); });
+    ctx.stroke();
+    ctx.restore();
+  }
+  function end(){
+    if (!drawing) return;
+    drawing = false;
+    if (currentStroke.length > 3) strokes.push(currentStroke);
+    checkHeart();
+  }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, { passive:false });
+  canvas.addEventListener('touchmove', move, { passive:false });
+  canvas.addEventListener('touchend', end);
+
+  document.getElementById('clearCanvas').addEventListener('click', function(){
+    points = []; strokes = []; completed = false;
+    drawGuide();
+  });
+
+  function checkHeart(){
+    if (points.length < 24) return;
+    var minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    points.forEach(function(p){
+      if(p.x<minX)minX=p.x; if(p.x>maxX)maxX=p.x;
+      if(p.y<minY)minY=p.y; if(p.y>maxY)maxY=p.y;
+    });
+    var w = maxX-minX, h = maxY-minY;
+    if (w < 30 || h < 30) return;
+    var ratio = w/h;
+    if (ratio < 0.55 || ratio > 1.9) return;
+
+    var cols = 5;
+    var colMinY = new Array(cols).fill(Infinity);
+    var colMaxY = new Array(cols).fill(-Infinity);
+    points.forEach(function(p){
+      var idx = Math.min(cols-1, Math.floor(((p.x-minX)/w) * cols));
+      if (p.y < colMinY[idx]) colMinY[idx] = p.y;
+      if (p.y > colMaxY[idx]) colMaxY[idx] = p.y;
+    });
+    for (var i=0;i<cols;i++){ if(!isFinite(colMinY[i])){ return; } }
+
+    var leftTop = colMinY[0];
+    var rightTop = colMinY[cols-1];
+    var midTop = colMinY[Math.floor(cols/2)];
+    var dipOk = midTop > leftTop - h*0.10 || midTop > rightTop - h*0.10;
+
+    var midBottom = colMaxY[Math.floor(cols/2)];
+    var bottomOk = midBottom > minY + h*0.55;
+
+    var pathLen = 0;
+    for (var s=0; s<strokes.length; s++){
+      var st = strokes[s];
+      for (var j=1;j<st.length;j++){
+        var dx = st[j].x - st[j-1].x, dy = st[j].y - st[j-1].y;
+        pathLen += Math.sqrt(dx*dx+dy*dy);
+      }
+    }
+    var perimeterEnough = pathLen > (w+h) * 1.1;
+
+    if (dipOk && bottomOk && perimeterEnough){
+      completed = true;
+      heartSuccess();
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function heartSuccess(){
+    var rect = canvas.getBoundingClientRect();
+    burstSparkles(22, rect.left+rect.width/2, rect.top+rect.height/2);
+    canvas.style.transition = 'transform 1s ease, opacity 1s ease, filter 1s ease';
+    canvas.style.filter = 'drop-shadow(0 0 30px rgba(255,111,165,0.9)) brightness(1.4)';
+    setTimeout(function(){
+      canvas.style.transform = 'scale(1.15)';
+    }, 60);
+    setTimeout(function(){
+      canvas.style.opacity = '0';
+      var wrap = document.querySelector('.draw-wrap');
+      if (wrap) wrap.style.transition = 'opacity .6s ease';
+      if (wrap) wrap.style.opacity = '0';
+    }, 700);
+    setTimeout(renderEnvelope, 1500);
+  }
+}
+
+/* ================= STEP 3: ENVELOPE ================= */
+function renderEnvelope(){
+  setScreen(
+    '<div id="envelopeScreen">' +
+      '<p class="big-line" style="font-size:1.2rem;">မင်းအတွက် စာလေးတစ်စောင်ရှိတယ် 💌</p>' +
+      '<p class="sub-line" style="margin-bottom:26px;">ဖွင့်ကြည့်နော်... 🥺❤️</p>' +
+      '<div class="envelope" id="envelope">' +
+        '<div class="letter-slip"></div>' +
+        '<div class="env-body"></div>' +
+        '<div class="env-heart">💗</div>' +
+        '<div class="env-flap"></div>' +
+      '</div>' +
+    '</div>',
+    function(){
+      var env = document.getElementById('envelope');
+      env.addEventListener('click', function(){
+        if (env.classList.contains('open')) return;
+        env.classList.add('open');
+        var rect = env.getBoundingClientRect();
+        burstSparkles(16, rect.left+rect.width/2, rect.top);
+        setTimeout(function(){
+          buildSequence();
+          runSequence(0);
+        }, 1000);
+      }, { once:true });
+    }
+  );
+}
+
+/* ================= STEP 4+: LINEAR STORY SEQUENCE ================= */
+var sequence = [];
+function buildSequence(){
+  sequence = [];
+  var msgs = CONFIG.messages || [];
+  msgs.forEach(function(m, i){
+    sequence.push({
+      kind:'letter',
+      text: m,
+      btnLabel: (i === msgs.length-1) ? 'နောက်ဆုံးတစ်ခုလေး... 🥺❤️' : 'Next ❤️'
+    });
+  });
+
+  sequence.push({ kind:'line', text: CONFIG.call1 + ' ရေ... ❤️' });
+  sequence.push({ kind:'line', text: 'တကယ်တော့ ' + CONFIG.call2 + ' မှာ ' + CONFIG.call1 + ' ကို ပြောချင်နေတာလေးတစ်ခုရှိတယ်... 🥺' });
+
+  var story = [
+    CONFIG.call1 + ' ကို တခြားသူတွေထက် ပိုပြီး အချိန်တစ်ခုလောက်ကတည်းက သတိထားမိလာတယ်... 💗',
+    CONFIG.call1 + ' နဲ့ စကားပြောရတဲ့အချိန်တွေက ' + CONFIG.call2 + ' အတွက် ထူးခြားလာတယ်... 🥰',
+    'အကြောင်းမရှိဘဲ ' + CONFIG.call1 + ' ကို သတိရမိတဲ့အချိန်တွေတောင် ရှိလာတယ်... 🥺❤️',
+    'အဲ့ဒီခံစားချက်ကို မသိချင်ယောင်ဆောင်နေတာ ကြာပြီ...',
+    'ဒါပေမဲ့ ဒီနေ့တော့ ရင်ထဲမှာ သိမ်းထားတာကို ဖွင့်ပြောချင်တယ်... 🫶'
+  ];
+  story.forEach(function(line){ sequence.push({ kind:'story', text: line }); });
+
+  sequence.push({ kind:'confess', text: CONFIG.call1 + ' ကို ' + CONFIG.call2 + ' သဘောကျနေတယ် ❤️' });
+  sequence.push({ kind:'confess', text: 'တကယ်တော့... ' + CONFIG.call2 + ' ' + CONFIG.call1 + ' ကို ချစ်မိနေပြီ 🥺💗' });
+  sequence.push({ kind:'line', text: CONFIG.call2 + 'ရဲ့ခံစားချက်ကို သိပေးရုံလေးနဲ့လည်း ကျေနပ်ပါတယ်... 🥺' });
+}
+
+function runSequence(idx){
+  if (idx >= sequence.length){
+    renderQuestion();
+    return;
+  }
+  var step = sequence[idx];
+  var isLetter = step.kind === 'letter';
+  var label = step.btnLabel || 'Next ❤️';
+  var body =
+    '<div id="storyScreen">' +
+      (isLetter ?
+        '<div class="letter-card"><p class="letter-text">' + escapeHtml(step.text) + '</p></div>' :
+        '<p class="' + (step.kind === 'confess' ? 'big-line' : 'sub-line') + '" style="font-size:' + (step.kind === 'confess' ? '1.35rem' : '1.12rem') + ';">' + escapeHtml(step.text) + '</p>'
+      ) +
+      '<div class="next-btn-wrap" style="margin-top:20px;"><button class="btn" id="seqNext">' + escapeHtml(label) + '</button></div>' +
+    '</div>';
+  setScreen(body, function(){
+    document.getElementById('seqNext').addEventListener('click', function(){
+      runSequence(idx+1);
+    });
+  });
+}
+
+function escapeHtml(str){
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ================= FINAL QUESTION ================= */
+function renderQuestion(){
+  setScreen(
+    '<div id="questionScreen">' +
+      '<p class="sub-line" style="font-size:1.15rem; margin-bottom:14px;">ဒါပေမဲ့... ' + escapeHtml(CONFIG.call2) + ' ကို အခွင့်အရေးလေးတစ်ခုပေးမလား? ❤️</p>' +
+      '<div class="next-btn-wrap" style="margin-top:22px;"><button class="btn" id="answerBtn">အဖြေပေးမယ် 💕</button></div>' +
+    '</div>',
+    function(){
+      document.getElementById('answerBtn').addEventListener('click', function(e){
+        var rect = e.target.getBoundingClientRect();
+        heartExplosion(rect.left+rect.width/2, rect.top+rect.height/2);
+        setTimeout(renderFinal, 1200);
+      });
+    }
+  );
+}
+
+function heartExplosion(cx, cy){
+  var syms = ['❤️','💗','💕','💖','💘','🥰','🫶','✨'];
+  for (var i=0;i<36;i++){
+    (function(){
+      var el = document.createElement('div');
+      el.className = 'particle';
+      el.textContent = syms[Math.floor(Math.random()*syms.length)];
+      el.style.left = cx + 'px';
+      el.style.bottom = (window.innerHeight - cy) + 'px';
+      el.style.fontSize = (16+Math.random()*18) + 'px';
+      el.style.setProperty('--drift', (Math.random()*260-130) + 'px');
+      el.style.animationDuration = (1.6+Math.random()*1.2) + 's';
+      el.style.animationTimingFunction = 'ease-out';
+      document.body.appendChild(el);
+      setTimeout(function(){ el.remove(); }, 3000);
+    })();
+  }
+}
+
+/* ================= FINAL SCREEN ================= */
+function renderFinal(){
+  setScreen(
+    '<div id="finalScreen">' +
+      '<div class="final-heart">❤️</div>' +
+      '<p class="sub-line" style="font-size:1.1rem;">အရမ်းကျေးဇူးတင်ပါတယ် ❤️</p>' +
+      '<p class="sub-line" style="font-size:1.05rem; margin-top:8px;">ဘာပဲဖြစ်ဖြစ်... ဒီနေ့တော့ ရင်ထဲကစကားကို ' + escapeHtml(CONFIG.call1) + ' သိသွားပြီနော် 🥺💗</p>' +
+      '<p class="final-title">I Like You ❤️</p>' +
+    '</div>',
+    function(){
+      clearInterval(ambientTimer);
+      setInterval(function(){
+        spawnFloating(HEART_SYMBOLS[Math.floor(Math.random()*HEART_SYMBOLS.length)], 16, 30, 7, 12);
+      }, 500);
+    }
+  );
+}
+
+/* ================= START ================= */
+renderIntro();
+</script>
+</body>
+</html>
