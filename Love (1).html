@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>❤ Love ❤</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Sans+Myanmar:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Noto Sans Myanmar','Myanmar Text',sans-serif;color:#fff;overflow:hidden;
+background:linear-gradient(-45deg,#160a2b,#3b0f3f,#5a1147,#20093c);background-size:300% 300%;animation:bgMove 14s ease infinite}
+@keyframes bgMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.hearts span{position:absolute;bottom:-60px;animation:rise linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+.scene{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s}
+.scene.active{opacity:1;visibility:visible}
+.card{text-align:center;max-width:600px;width:calc(100% - 48px);padding:44px 28px;border-radius:26px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,.45);animation:cardIn 1s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes cardIn{from{transform:translateY(50px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+.big{font-size:46px;display:inline-block;animation:pulse 1.6s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.card p{font-size:clamp(17px,4.2vw,22px);line-height:2.1;margin:18px 0 26px;font-weight:600;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.btn{cursor:pointer;border:none;font-family:inherit;font-size:17px;font-weight:800;color:#fff;padding:13px 34px;border-radius:999px;background:linear-gradient(135deg,#ff5f9e,#ff2d78,#c81d60);box-shadow:0 8px 26px rgba(255,45,120,.45);transition:.25s}
+.btn:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 14px 34px rgba(255,45,120,.6)}
+.btn:active{transform:scale(.96)}
+#cd{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(10,3,22,.85);backdrop-filter:blur(6px)}
+#cdNum{font-size:110px;font-weight:800;color:#ff9ec7;text-shadow:0 0 40px #ff2d78;animation:pop 1s ease}
+@keyframes pop{0%{transform:scale(.3);opacity:0}45%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+#cdTxt{margin-top:12px;color:#ffd7e8;font-size:15px}
+#final{position:fixed;inset:0;z-index:3;display:none}
+#photos{position:absolute;inset:0}
+#photos img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.8s ease}
+#photos img.on{opacity:1}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,4,26,.45) 0%,rgba(12,4,26,.68) 60%,rgba(12,4,26,.86) 100%)}
+#songTitle{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:13px;color:#ffc9e0;letter-spacing:2px;z-index:4;opacity:.9;text-shadow:0 2px 10px #000}
+#lyricWrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px}
+#lyric{max-width:680px;width:100%;text-align:center;padding:30px 24px;border-radius:22px;background:rgba(10,3,20,.45);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 50px rgba(0,0,0,.5)}
+body.noPhoto #lyric{background:rgba(255,255,255,.07)}
+#lyric .hi{font-family:'Dancing Script',cursive;font-size:clamp(26px,6vw,44px);color:#ffd7e8;text-shadow:0 0 24px rgba(255,90,160,.85);line-height:1.4}
+#lyric .my{margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:2;color:#fff;font-weight:600;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.lyIn{animation:lyIn .9s cubic-bezier(.2,.8,.3,1.1) both}
+@keyframes lyIn{from{opacity:0;transform:translateY(46px) scale(.9);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+.lyOut{animation:lyOut .5s ease both}
+@keyframes lyOut{to{opacity:0;transform:translateY(-34px);filter:blur(8px)}}
+#prog{position:absolute;bottom:0;left:0;height:5px;width:0;background:linear-gradient(90deg,#ff9ec7,#ff2d78);box-shadow:0 0 14px #ff2d78;z-index:4}
+#playBtn{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;display:none}
+#end{position:fixed;inset:0;z-index:7;display:none;align-items:center;justify-content:center;background:rgba(10,3,22,.88);backdrop-filter:blur(8px)}
+#end h2{font-size:clamp(20px,5vw,30px);line-height:2;margin:14px 0 8px}
+#end .note{color:#ffd7e8;margin-bottom:24px;font-size:14px}
+</style>
+</head>
+<body class="noPhoto">
+<div class="hearts" id="hearts"></div>
+
+<section class="scene active" id="s1"><div class="card"><span class="big">💌</span><p>မီးကို ပြောစရာလေးရှိလို့ပါဗျာ</p><button class="btn" onclick="go(2)">ပြောလေ 💬</button></div></section>
+<section class="scene" id="s2"><div class="card"><span class="big">🥺</span><p>မီးက ဘာလို့အခြားသူတွေနဲ့မတူရတာလဲ?</p><button class="btn" onclick="go(3)">ဘာလို့လဲ? 🤔</button></div></section>
+<section class="scene" id="s3"><div class="card"><span class="big">💗</span><p>ကိုရဲ့ နှလုံးသားထဲမှာ အခြားသူတွေထက် မီးကိုပဲ အမြဲမေတ္တာတွယ်ကပ်နေလို့လေ</p><button class="btn" onclick="go(4)">Next ➜</button></div></section>
+<section class="scene" id="s4"><div class="card"><span class="big">🎁</span><p>ဒါနဲ့ မီးအတွက် ပြောချင်စရာလေးတွေရှိလို့ ကြည့်ချင်လားနော</p><button class="btn" onclick="startCount()">ကြည့်မယ် 👀</button></div></section>
+
+<div id="cd"><div id="cdNum">3</div><div id="cdTxt">💘 စောင့်ကြည့်နော... 💘</div></div>
+
+<section id="final">
+<div id="photos"></div>
+<div class="shade"></div>
+<div id="songTitle">♫ မီး အတွက် သီးသန့် ❤ ♫</div>
+<div id="lyricWrap"><div id="lyric"></div></div>
+<div id="prog"></div>
+<button id="playBtn" class="btn" onclick="tryPlay()">▶ သီချင်းဖွင့်ရန် နှိပ်ပါ</button>
+</section>
+
+<div id="end"><div class="card"><span class="big">❤️</span><h2>မီးကို အရမ်းချစ်တယ်ဗျာ ❤</h2><div class="note">— အဆုံးမရှိတဲ့ ချစ်ခြင်းမေတ္တာနဲ့ —</div><button class="btn" onclick="location.reload()">↺ ပြန်ကြည့်မယ်</button></div></div>
+
+<audio id="au" src="https://www.image2url.com/r2/default/audio/1785840905906-0774dd06-0494-4ba3-a526-216938c0ca83.mp3" preload="auto"></audio>
+
+<script>
+var LYRICS=[["Baatein yeh teri jaise duayein","မီးပြောတဲ့ စကားလေးတွေက ဆုတောင်းမေတ္တာတွေလိုပါပဲဗျာ..."],["Main inmein shaamil ho hi gaya","ကိုလည်း အဲ့ဒီအထဲမှာ တကယ်ကို ပါဝင်လို့သွားခဲ့ပြီ။"],["Dil mein tumhare thoda sa hissa","မီးရဲ့ရင်ခွင်ထဲမှာ ကို့အတွက် နေရာလေးတစ်ခု"],["Haan mujhko haasil ho hi gaya","အမှန်တကယ် ပိုင်ဆိုင်ခွင့် ရသွားခဲ့ပြီလေ။"],["Yeh dil bhi tumhara","ဒီနှလုံးသားလေးကလည်း မီးလိုပါပဲဗျာ..."],["Tumhari tarah hai","မီးလိုပဲ စိတ်သဘောထားကောင်းပြီး"],["Jo khushiyan mujhe de raha","ကို့ကို ပျော်ရွှင်မှုတွေ အမြဲတမ်း ပေးစွမ်းနေတယ်။"],["Ho tum jis bhi jagah pe","မီးရှိနေတဲ့ ဘယ်နေရာမဆို"],["Wahin pe ho raunak","အမြဲတမ်း စည်ကားလို့ လှပနေတာပဲ။"],["Bahut khoobsurat ho","မီးလေးက အရမ်းကို လှပလွန်းနေတယ်..."],["Bahut khoobsurat ho","အစစအရာရာ အရမ်းလှပနေတာပဲဗျာ"],["Aap sar se paaon tak","ထိပ်ဆုံးကနေ ခြေဖျားအထိပေါ့။"]];
+var PHOTOS=["https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_31D112BB-D533-42BA-BD76-58044BC47990.jpeg","https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_7A26AD06-1AA1-4248-9D8A-74948E043160.jpeg","https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_816D8620-A8BB-4FA1-8D66-606785FD9F7C.jpeg","https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_910570F4-2822-4241-BF24-F55475C29BF8.jpeg","https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_9F9C5F90-8484-4929-9EC8-523F9E32D158.jpeg","https://github.com/PaingPainghein/webapi/raw/refs/heads/main/Messenger_creation_DF089372-5552-4A5C-BCE3-75F6A71116DB.jpeg"];
+var au=document.getElementById('au');
+var started=false,curLine=-1,curPhoto=-1;
+function hideScenes(){var s=document.querySelectorAll('.scene');for(var i=0;i<s.length;i++)s[i].classList.remove('active');}
+function go(n){hideScenes();document.getElementById('s'+n).classList.add('active');}
+function startCount(){hideScenes();document.getElementById('cd').style.display='flex';var num=document.getElementById('cdNum');var n=3;
+function tick(){num.style.animation='none';void num.offsetWidth;num.style.animation='';
+if(n>0){num.textContent=n;n--;setTimeout(tick,1000);}else{num.textContent='❤';setTimeout(openFinal,900);}}
+tick();}
+function openFinal(){document.getElementById('cd').style.display='none';document.getElementById('final').style.display='block';setupPhotos();tryPlay();}
+function setupPhotos(){if(!PHOTOS.length)return;document.body.classList.remove('noPhoto');var box=document.getElementById('photos');
+for(var i=0;i<PHOTOS.length;i++){var im=new Image();im.src=PHOTOS[i];box.appendChild(im);}
+if(box.children[0])box.children[0].classList.add('on');}
+function tryPlay(){var p=au.play();
+if(p&&p.then){p.then(startShow).catch(function(){document.getElementById('playBtn').style.display='block';});}else{startShow();}}
+function startShow(){if(started)return;started=true;document.getElementById('playBtn').style.display='none';requestAnimationFrame(loop);}
+function loop(){var d=(au.duration&&isFinite(au.duration))?au.duration:42;var t=au.currentTime;
+var step=d/LYRICS.length;var li=Math.floor(t/step);if(li>=LYRICS.length)li=LYRICS.length-1;
+if(li!==curLine){showLine(li);curLine=li;}
+if(PHOTOS.length){var ps=d/PHOTOS.length;var pi=Math.floor(t/ps);if(pi>=PHOTOS.length)pi=PHOTOS.length-1;
+if(pi!==curPhoto){var ims=document.getElementById('photos').children;for(var i=0;i<ims.length;i++){ims[i].classList.toggle('on',i===pi);}curPhoto=pi;}}
+document.getElementById('prog').style.width=(t/d*100)+'%';
+if(au.ended){document.getElementById('end').style.display='flex';return;}
+requestAnimationFrame(loop);}
+function showLine(i){var box=document.getElementById('lyric');box.classList.remove('lyIn');box.classList.add('lyOut');
+setTimeout(function(){box.innerHTML='<div class="hi">'+LYRICS[i][0]+'</div><div class="my">'+LYRICS[i][1]+'</div>';box.classList.remove('lyOut');box.classList.add('lyIn');},480);}
+(function(){var h=document.getElementById('hearts');var em=['❤','💖','💘','💕','🌸','🎵'];
+for(var i=0;i<26;i++){var s=document.createElement('span');s.textContent=em[i%em.length];s.style.left=(Math.random()*100)+'%';s.style.fontSize=(13+Math.random()*22)+'px';s.style.animationDuration=(7+Math.random()*9)+'s';s.style.animationDelay=(Math.random()*9)+'s';h.appendChild(s);}})();
+</script>
+</body>
+</html>
